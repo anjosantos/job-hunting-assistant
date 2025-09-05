@@ -56,7 +56,27 @@ export const CreateJob = () => {
     }
   `;
 
-  const [createJob] = useMutation(CREATE_JOB);
+  const [createJob, { loading }] = useMutation(CREATE_JOB, {
+    onCompleted: () => {
+      setNewJob({
+        id: "",
+        role: "",
+        description: "",
+        company: "",
+        location: "",
+        resumePosted: "",
+        datePosted: "",
+        lead: "",
+        salary: "",
+        status: "",
+        withGithubLink: false,
+        withLinkedinLink: false,
+        withPortfolioLink: false,
+        withCoverLetter: false,
+        referenceLink: "",
+      });
+    },
+  });
 
   const handleCreateJob = () => {
     createJob({
@@ -88,6 +108,7 @@ export const CreateJob = () => {
                 <Label>Role</Label>
                 <Input
                   type="text"
+                  value={newJob.role}
                   onChange={(e) =>
                     setNewJob((prev) => ({ ...prev, role: e.target.value }))
                   }
@@ -98,6 +119,7 @@ export const CreateJob = () => {
                 <Label>Description</Label>
                 <Input
                   type="text"
+                  value={newJob.description}
                   onChange={(e) =>
                     setNewJob((prev) => ({
                       ...prev,
@@ -111,6 +133,7 @@ export const CreateJob = () => {
                 <Label>Company</Label>
                 <Input
                   type="text"
+                  value={newJob.company}
                   onChange={(e) =>
                     setNewJob((prev) => ({ ...prev, company: e.target.value }))
                   }
@@ -121,6 +144,7 @@ export const CreateJob = () => {
                 <Label>Location</Label>
                 <Input
                   type="text"
+                  value={newJob.location}
                   onChange={(e) =>
                     setNewJob((prev) => ({ ...prev, location: e.target.value }))
                   }
@@ -132,6 +156,7 @@ export const CreateJob = () => {
                   id="date-picker-resume-posted"
                   label="Resume Posted"
                   placeholder="Select a date"
+                  value={newJob.resumePosted}
                   onChange={(dates, currentDateString) => {
                     setNewJob((prev) => ({
                       ...prev,
@@ -145,6 +170,7 @@ export const CreateJob = () => {
                   id="date-picker-date-posted"
                   label="Date Posted"
                   placeholder="Select a date"
+                  value={newJob.datePosted}
                   onChange={(dates, currentDateString) => {
                     setNewJob((prev) => ({
                       ...prev,
@@ -160,6 +186,7 @@ export const CreateJob = () => {
                   <Select
                     options={options}
                     placeholder="Select an option"
+                    value={newJob.lead}
                     onChange={(value: string) => {
                       setNewJob((prev) => ({
                         ...prev,
@@ -180,8 +207,9 @@ export const CreateJob = () => {
                   variant="primary"
                   startIcon={<PlusIcon />}
                   onClick={handleCreateJob}
+                  disabled={loading}
                 >
-                  Create
+                  {loading ? "Creating..." : "Create"}
                 </Button>
               </div>
             </div>
