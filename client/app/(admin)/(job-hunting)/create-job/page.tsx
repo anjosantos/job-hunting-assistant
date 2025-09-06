@@ -11,7 +11,7 @@ import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
 import { PlusIcon, ChevronDownIcon } from "@/icons";
 
-import { type Job } from "@/types";
+import { type Job, Lead, Status } from "@/types";
 
 export const CreateJob = () => {
   const [newJob, setNewJob] = useState<Job>({
@@ -20,11 +20,14 @@ export const CreateJob = () => {
     description: "",
     company: "",
     location: "",
-    resumePosted: "",
-    datePosted: "",
+    resumePosted: null,
+    dateCreated: "",
+    dateApprovedRejected: "",
     lead: "",
-    salary: "",
-    status: "",
+    salaryMin: 0,
+    salaryMax: 0,
+    status: Status.SENT,
+    isExternalWebsite: false,
     withGithubLink: false,
     withLinkedinLink: false,
     withPortfolioLink: false,
@@ -34,13 +37,23 @@ export const CreateJob = () => {
 
   const CREATE_JOB = gql`
     mutation CreateJob(
-      $role: String!
-      $description: String!
-      $company: String!
-      $location: String!
-      $resumePosted: String!
-      $datePosted: String!
-      $lead: String!
+      $role: String
+      $description: String
+      $company: String
+      $location: String
+      $resumePosted: [ResumeInput]
+      $dateCreated: String
+      $dateApprovedRejected: String
+      $lead: Lead
+      $salaryMin: Int
+      $salaryMax: Int
+      $status: Status
+      $isExternalWebsite: Boolean
+      $withGithubLink: Boolean
+      $withLinkedinLink: Boolean
+      $withPortfolioLink: Boolean
+      $withCoverLetter: Boolean
+      $referenceLink: String
     ) {
       createJob(
         input: {
@@ -49,8 +62,18 @@ export const CreateJob = () => {
           company: $company
           location: $location
           resumePosted: $resumePosted
-          datePosted: $datePosted
+          dateCreated: $dateCreated
+          dateApprovedRejected: $dateApprovedRejected
           lead: $lead
+          salaryMin: $salaryMin
+          salaryMax: $salaryMax
+          status: $status
+          isExternalWebsite: $isExternalWebsite
+          withGithubLink: $withGithubLink
+          withLinkedinLink: $withLinkedinLink
+          withPortfolioLink: $withPortfolioLink
+          withCoverLetter: $withCoverLetter
+          referenceLink: $referenceLink
         }
       ) {
         id
@@ -66,11 +89,14 @@ export const CreateJob = () => {
         description: "",
         company: "",
         location: "",
-        resumePosted: "",
-        datePosted: "",
+        resumePosted: null,
+        dateCreated: "",
+        dateApprovedRejected: "",
         lead: "",
-        salary: "",
-        status: "",
+        salaryMin: 0,
+        salaryMax: 0,
+        status: Status.SENT,
+        isExternalWebsite: false,
         withGithubLink: false,
         withLinkedinLink: false,
         withPortfolioLink: false,
@@ -78,26 +104,23 @@ export const CreateJob = () => {
         referenceLink: "",
       });
     },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
   });
 
   const handleCreateJob = () => {
     createJob({
       variables: {
-        role: newJob?.role,
-        description: newJob?.description,
-        company: newJob?.company,
-        location: newJob?.location,
-        resumePosted: newJob?.resumePosted,
-        datePosted: newJob?.datePosted,
-        lead: newJob?.lead,
+        ...newJob,
       },
     });
   };
 
   const options = [
-    { value: "LinkedIn", label: "LinkedIn" },
-    { value: "Indeed", label: "Indeed" },
-    { value: "Glassdoor", label: "Glassdoor" },
+    { value: Lead.LINKEDIN as string, label: "LinkedIn" },
+    { value: Lead.INDEED as string, label: "Indeed" },
+    { value: Lead.GLASSDOOR as string, label: "Glassdoor" },
   ];
 
   return (
@@ -117,6 +140,7 @@ export const CreateJob = () => {
                   placeholder="Enter role here"
                 />
               </div>
+
               <div>
                 <Label>Description</Label>
                 <Input
@@ -131,6 +155,7 @@ export const CreateJob = () => {
                   placeholder="Enter description here"
                 />
               </div>
+
               <div>
                 <Label>Company</Label>
                 <Input
@@ -142,6 +167,7 @@ export const CreateJob = () => {
                   placeholder="Enter company here"
                 />
               </div>
+
               <div>
                 <Label>Location</Label>
                 <Input
@@ -153,30 +179,17 @@ export const CreateJob = () => {
                   placeholder="Enter location here"
                 />
               </div>
+
               <div>
                 <DatePicker
-                  id="date-picker-resume-posted"
-                  label="Resume Posted"
+                  id="date-picker-date-created"
+                  label="Date Created"
                   placeholder="Select a date"
-                  value={newJob.resumePosted}
+                  value={newJob.dateCreated}
                   onChange={(dates, currentDateString) => {
                     setNewJob((prev) => ({
                       ...prev,
-                      resumePosted: currentDateString,
-                    }));
-                  }}
-                />
-              </div>
-              <div>
-                <DatePicker
-                  id="date-picker-date-posted"
-                  label="Date Posted"
-                  placeholder="Select a date"
-                  value={newJob.datePosted}
-                  onChange={(dates, currentDateString) => {
-                    setNewJob((prev) => ({
-                      ...prev,
-                      datePosted: currentDateString,
+                      dateCreated: currentDateString,
                     }));
                   }}
                 />
@@ -188,11 +201,11 @@ export const CreateJob = () => {
                   <Select
                     options={options}
                     placeholder="Select an option"
-                    value={newJob.lead}
+                    value={newJob.lead as string} // must be string
                     onChange={(value: string) => {
                       setNewJob((prev) => ({
                         ...prev,
-                        lead: value,
+                        lead: value as Lead, // cast string to enum
                       }));
                     }}
                     className="dark:bg-dark-900"
@@ -200,6 +213,37 @@ export const CreateJob = () => {
                   <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                     <ChevronDownIcon />
                   </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Salary Min</Label>
+                  <Input
+                    type="number"
+                    value={newJob.salaryMin}
+                    onChange={(e) =>
+                      setNewJob((prev) => ({
+                        ...prev,
+                        salaryMin: Number(e.target.value),
+                      }))
+                    }
+                    placeholder="Min Salary"
+                  />
+                </div>
+                <div>
+                  <Label>Salary Max</Label>
+                  <Input
+                    type="number"
+                    value={newJob.salaryMax}
+                    onChange={(e) =>
+                      setNewJob((prev) => ({
+                        ...prev,
+                        salaryMax: Number(e.target.value),
+                      }))
+                    }
+                    placeholder="Max Salary"
+                  />
                 </div>
               </div>
 

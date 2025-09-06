@@ -1,0 +1,110 @@
+"use client";
+
+import { gql } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
+import { useState } from "react";
+import ComponentCard from "@/components/common/ComponentCard";
+import Label from "@/components/form/Label";
+import TextArea from "@/components/form/input/TextArea";
+import DatePicker from "@/components/form/date-picker";
+import Button from "@/components/ui/button/Button";
+import { PlusIcon } from "@/icons";
+
+import { type Resume } from "@/types";
+
+export const CreateResume = () => {
+  const [newResume, setNewResume] = useState<Resume>({
+    id: "",
+    content: "",
+    dateCreated: "",
+  });
+
+  const CREATE_RESUME = gql`
+    mutation CreateResume(
+      $content: String!
+      $dateCreated: String!
+    ) {
+      createResume(
+        input: {
+          content: $content
+          dateCreated: $dateCreated
+        }
+      ) {
+        id
+      }
+    }
+  `;
+
+  const [createResume, { loading }] = useMutation(CREATE_RESUME, {
+    onCompleted: () => {
+      setNewResume({
+        id: "",
+        content: "",
+        dateCreated: "",
+      });
+    },
+  });
+
+  const handleCreateResume = () => {
+    createResume({
+      variables: {
+        content: newResume.content,
+        dateCreated: newResume.dateCreated,
+      },
+    });
+  };
+
+  return (
+    <div>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <div className="space-y-6">
+          <ComponentCard title="Create Resume">
+            <div className="space-y-6">
+              <div>
+                <Label>Content</Label>
+                <TextArea
+                  value={newResume.content}
+                  onChange={(value) =>
+                    setNewResume((prev) => ({
+                      ...prev,
+                      content: value,
+                    }))
+                  }
+                  placeholder="Enter resume content"
+                  rows={20}
+                />
+              </div>
+              <div>
+                <DatePicker
+                  id="date-picker-date-created"
+                  label="Date Created"
+                  placeholder="Select a date"
+                  value={newResume.dateCreated}
+                  onChange={(dates, currentDateString) => {
+                    setNewResume((prev) => ({
+                      ...prev,
+                      dateCreated: currentDateString,
+                    }));
+                  }}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  size="sm"
+                  variant="primary"
+                  startIcon={<PlusIcon />}
+                  onClick={handleCreateResume}
+                  disabled={loading}
+                >
+                  {loading ? "Creating..." : "Create"}
+                </Button>
+              </div>
+            </div>
+          </ComponentCard>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CreateResume;

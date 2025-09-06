@@ -44,6 +44,11 @@ const navItems: NavItem[] = [
     path: "/jobs",
   },
   {
+    name: "Create Resume",
+    icon: <FileIcon />,
+    path: "/create-resume",
+  },
+  {
     icon: <CalenderIcon />,
     name: "Calendar",
     path: "/calendar",

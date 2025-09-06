@@ -9,17 +9,33 @@ async function connectToDB() {
 
 connectToDB();
 
+const resumeSchema = new mongoose.Schema({
+  id: String,
+  content: String,
+  dateCreated: String,
+  version: Number,
+});
+
 const jobSchema = new mongoose.Schema({
   id: String,
   role: String,
   description: String,
   company: String,
   location: String,
-  resumePosted: String,
-  datePosted: String,
-  lead: String,
-  salary: String,
-  status: String,
+  resumePosted: [resumeSchema],
+  dateCreated: String,
+  dateApprovedRejected: String,
+  lead: {
+    type: String,
+    enum: ["LINKEDIN", "INDEED", "GLASSDOOR"],
+  },
+  salaryMin: Number,
+  salaryMax: Number,
+  status: {
+    type: String,
+    enum: ["SENT", "REPLIED", "ACCEPTED", "REJECTED"],
+  },
+  isExternalWebsite: Boolean,
   withGithubLink: Boolean,
   withLinkedinLink: Boolean,
   withPortfolioLink: Boolean,
@@ -28,5 +44,6 @@ const jobSchema = new mongoose.Schema({
 });
 
 const Jobs = mongoose.model("Job", jobSchema);
+const Resumes = mongoose.model("Resume", resumeSchema);
 
-export { Jobs };
+export { Jobs, Resumes };
