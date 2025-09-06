@@ -31,16 +31,14 @@ const BasicTables = async () => {
         description
         company
         location
-        resumePosted
-        datePosted
+        resumePosted {
+          id
+        }
+        dateCreated
         lead
-        salary
+        salaryMin
+        salaryMax
         status
-        withGithubLink
-        withLinkedinLink
-        withPortfolioLink
-        withCoverLetter
-        referenceLink
       }
     }
   `;
@@ -92,13 +90,31 @@ const BasicTables = async () => {
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                   >
-                    Date Posted
+                    Salary Min
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    Salary Max
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    Date Created
                   </TableCell>
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                   >
                     Lead
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                  >
+                    Status
                   </TableCell>
                 </TableRow>
               </TableHeader>
@@ -120,13 +136,22 @@ const BasicTables = async () => {
                         {job.location}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        {job.resumePosted}
+                        {job.resumePosted?.id}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        {job.datePosted}
+                        {job.salaryMin}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {job.salaryMax}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {job.dateCreated}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                         {job.lead}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {job.status}
                       </TableCell>
                     </TableRow>
                   ))}
