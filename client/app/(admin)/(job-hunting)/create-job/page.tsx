@@ -1,7 +1,7 @@
 "use client";
 
 import { gql } from "@apollo/client";
-import { useMutation } from "@apollo/client/react";
+import { useQuery, useMutation } from "@apollo/client/react";
 import { useState } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import Label from "@/components/form/Label";
@@ -13,7 +13,7 @@ import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
 import { PlusIcon, ChevronDownIcon } from "@/icons";
 
-import { type Job, Lead, Status } from "@/types";
+import { type Job, type Resume, Lead, Status } from "@/types";
 
 export const CreateJob = () => {
   const [newJob, setNewJob] = useState<Job>({
@@ -43,7 +43,7 @@ export const CreateJob = () => {
       $description: String
       $company: String
       $location: String
-      $resumePosted: [ResumeInput]
+      $resumePosted: ResumeInput
       $dateCreated: String
       $dateApprovedRejected: String
       $lead: Lead
@@ -83,6 +83,26 @@ export const CreateJob = () => {
     }
   `;
 
+  const GET_RESUMES = gql`
+    query GetResumes {
+      getResumes {
+        id
+        dateCreated
+        version
+      }
+    }
+  `;
+
+  type GetResumesType = {
+    getResumes: Resume[];
+  };
+
+  const {
+    data: getResumesData,
+    error: getResumesError,
+    loading: getResumesLoading,
+  } = useQuery<GetResumesType>(GET_RESUMES);
+
   const [createJob, { loading }] = useMutation(CREATE_JOB, {
     onCompleted: () => {
       setNewJob({
@@ -112,6 +132,7 @@ export const CreateJob = () => {
   });
 
   const handleCreateJob = () => {
+    console.log(newJob, "newJob");
     createJob({
       variables: {
         ...newJob,
@@ -119,11 +140,13 @@ export const CreateJob = () => {
     });
   };
 
-  const options = [
+  const leadOptions = [
     { value: Lead.LINKEDIN as string, label: "LinkedIn" },
     { value: Lead.INDEED as string, label: "Indeed" },
     { value: Lead.GLASSDOOR as string, label: "Glassdoor" },
   ];
+
+  if (getResumesLoading) return <p> Data loading...</p>;
 
   return (
     <div>
@@ -171,6 +194,47 @@ export const CreateJob = () => {
               </div>
 
               <div>
+                <Label>Resume</Label>
+                {getResumesData && getResumesData.getResumes ? (
+                  <div className="relative">
+                    <Select
+                      options={getResumesData.getResumes.map(
+                        (resume: Resume) => ({
+                          value: resume.id,
+                          label: `${resume.dateCreated}-v${resume.version}`,
+                        })
+                      )}
+                      placeholder="Select a resume"
+                      value={newJob.resumePosted?.id || ""}
+                      onChange={(value: string) => {
+                        const selectedResume = getResumesData.getResumes.find(
+                          (r) => r.id === value
+                        );
+                        setNewJob((prev) => ({
+                          ...prev,
+                          resumePosted: {
+                            id: selectedResume ? selectedResume.id : "",
+                            content: selectedResume
+                              ? selectedResume.content
+                              : "",
+                            version: selectedResume
+                              ? selectedResume.version
+                              : 0,
+                          } as Resume,
+                        }));
+                      }}
+                      className="dark:bg-dark-900"
+                    />
+                    <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                      <ChevronDownIcon />
+                    </span>
+                  </div>
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </div>
+
+              <div>
                 <Label>Location</Label>
                 <Input
                   type="text"
@@ -201,7 +265,7 @@ export const CreateJob = () => {
                 <Label>Lead</Label>
                 <div className="relative">
                   <Select
-                    options={options}
+                    options={leadOptions}
                     placeholder="Select an option"
                     value={newJob.lead as string} // must be string
                     onChange={(value: string) => {

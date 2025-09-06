@@ -22,7 +22,7 @@ const jobSchema = new mongoose.Schema({
   description: String,
   company: String,
   location: String,
-  resumePosted: [resumeSchema],
+  resumePosted: resumeSchema,
   dateCreated: String,
   dateApprovedRejected: String,
   lead: {

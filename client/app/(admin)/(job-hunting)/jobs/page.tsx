@@ -1,7 +1,5 @@
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { Metadata } from "next";
-import Image from "next/image";
 import React from "react";
+import { Metadata } from "next";
 import { gql } from "@apollo/client";
 
 import {
@@ -11,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Badge from "@/components/ui/badge/Badge";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { query } from "@/lib/ApolloClient";
 import { type Job } from "@/types";
 

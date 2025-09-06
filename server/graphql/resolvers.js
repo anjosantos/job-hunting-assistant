@@ -39,7 +39,6 @@ export const resolvers = {
         description,
         company,
         location,
-        resumePosted,
         dateCreated,
         dateApprovedRejected,
         lead,
@@ -53,6 +52,10 @@ export const resolvers = {
         withCoverLetter,
         referenceLink,
       });
+      if (resumePosted && resumePosted.id) {
+        const resume = await Resumes.findById(resumePosted.id);
+        newJob.resumePosted = resume;
+      }
 
       newJob.id = newJob._id;
       await newJob.save();

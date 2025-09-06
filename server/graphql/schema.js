@@ -26,7 +26,7 @@ export const typeDefs = `
       description: String
       company: String
       location: String
-      resumePosted: [Resume]
+      resumePosted: Resume
       dateCreated: String
       dateApprovedRejected: String
       lead: Lead
@@ -54,7 +54,7 @@ export const typeDefs = `
       description: String
       company: String
       location: String
-      resumePosted: [ResumeInput]
+      resumePosted: ResumeInput
       dateCreated: String
       dateApprovedRejected: String
       lead: Lead
