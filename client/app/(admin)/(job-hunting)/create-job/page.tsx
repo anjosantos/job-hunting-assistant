@@ -43,13 +43,15 @@ export const CreateJob = () => {
       $lead: String!
     ) {
       createJob(
-        role: $role
-        description: $description
-        company: $company
-        location: $location
-        resumePosted: $resumePosted
-        datePosted: $datePosted
-        lead: $lead
+        input: {
+          role: $role
+          description: $description
+          company: $company
+          location: $location
+          resumePosted: $resumePosted
+          datePosted: $datePosted
+          lead: $lead
+        }
       ) {
         id
       }
