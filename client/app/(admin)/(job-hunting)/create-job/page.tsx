@@ -6,6 +6,8 @@ import { useState } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import Label from "@/components/form/Label";
 import Input from "@/components/form/input/InputField";
+import Checkbox from "@/components/form/input/Checkbox";
+import TextArea from "@/components/form/input/TextArea";
 import DatePicker from "@/components/form/date-picker";
 import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
@@ -143,16 +145,16 @@ export const CreateJob = () => {
 
               <div>
                 <Label>Description</Label>
-                <Input
-                  type="text"
+                <TextArea
                   value={newJob.description}
-                  onChange={(e) =>
+                  onChange={(value) =>
                     setNewJob((prev) => ({
                       ...prev,
-                      description: e.target.value,
+                      description: value,
                     }))
                   }
                   placeholder="Enter description here"
+                  rows={6}
                 />
               </div>
 
@@ -245,6 +247,93 @@ export const CreateJob = () => {
                     placeholder="Max Salary"
                   />
                 </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={newJob.isExternalWebsite}
+                    onChange={(value) =>
+                      setNewJob((prev) => ({
+                        ...prev,
+                        isExternalWebsite: value,
+                      }))
+                    }
+                  />
+                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Is redirected to External Website?
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={newJob.withGithubLink}
+                    onChange={(value) =>
+                      setNewJob((prev) => ({
+                        ...prev,
+                        withGithubLink: value,
+                      }))
+                    }
+                  />
+                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Did you send your Github Link?
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={newJob.withLinkedinLink}
+                    onChange={(value) =>
+                      setNewJob((prev) => ({
+                        ...prev,
+                        withLinkedinLink: value,
+                      }))
+                    }
+                  />
+                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Did you send your LinkedIn Link?
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={newJob.withPortfolioLink}
+                    onChange={(value) =>
+                      setNewJob((prev) => ({
+                        ...prev,
+                        withPortfolioLink: value,
+                      }))
+                    }
+                  />
+                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Did you send your Portfolio Link?
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={newJob.withCoverLetter}
+                    onChange={(value) =>
+                      setNewJob((prev) => ({
+                        ...prev,
+                        withCoverLetter: value,
+                      }))
+                    }
+                  />
+                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Did you send a Cover Letter?
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <Label>Reference Link</Label>
+                <Input
+                  type="text"
+                  value={newJob.referenceLink}
+                  onChange={(e) =>
+                    setNewJob((prev) => ({
+                      ...prev,
+                      referenceLink: e.target.value,
+                    }))
+                  }
+                  placeholder="Enter reference link here"
+                />
               </div>
 
               <div className="flex justify-end">
