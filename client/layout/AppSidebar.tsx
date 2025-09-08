@@ -18,6 +18,7 @@ import {
   UserCircleIcon,
   FileIcon,
   ChatIcon,
+  MailIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 
@@ -53,6 +54,11 @@ const navItems: NavItem[] = [
     name: "Create Cover Letter Template",
     icon: <FileIcon />,
     path: "/create-cover-letter-template",
+  },
+  {
+    icon: <MailIcon />,
+    name: "Generate Cover Letter",
+    path: "/generate-cover-letter",
   },
   {
     icon: <ChatIcon />,

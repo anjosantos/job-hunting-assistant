@@ -11,6 +11,9 @@ export const resolvers = {
     getResumes: async () => {
       return await Resumes.find();
     },
+    getCoverLetterTemplates: async () => {
+      return await CoverLetterTemplates.find();
+    },
   },
   Mutation: {
     createJob: async (_, { input }) => {

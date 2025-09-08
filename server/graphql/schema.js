@@ -87,7 +87,7 @@ export const typeDefs = `
       getJobs: [Job]
       getJobById(id: ID!): Job
       getResumes: [Resume]
-      getCoverLetterTemplate: [CoverLetterTemplate]
+      getCoverLetterTemplates: [CoverLetterTemplate]
     }
 
     type Mutation {
