@@ -12,7 +12,7 @@ import { PlusIcon } from "@/icons";
 
 import { type Resume } from "@/types";
 
-export const CreateResume = () => {
+export const CreateResumePage = () => {
   const [newResume, setNewResume] = useState<Resume>({
     id: "",
     content: "",
@@ -20,16 +20,8 @@ export const CreateResume = () => {
   });
 
   const CREATE_RESUME = gql`
-    mutation CreateResume(
-      $content: String!
-      $dateCreated: String!
-    ) {
-      createResume(
-        input: {
-          content: $content
-          dateCreated: $dateCreated
-        }
-      ) {
+    mutation CreateResume($content: String!, $dateCreated: String!) {
+      createResume(input: { content: $content, dateCreated: $dateCreated }) {
         id
       }
     }
@@ -107,4 +99,4 @@ export const CreateResume = () => {
   );
 };
 
-export default CreateResume;
+export default CreateResumePage;

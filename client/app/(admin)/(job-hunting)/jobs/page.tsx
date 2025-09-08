@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-const BasicTables = async () => {
+const JobsPage = async () => {
   const GET_JOBS = gql`
     query GetJobs {
       getJobs {
@@ -162,4 +162,4 @@ const BasicTables = async () => {
   );
 };
 
-export default BasicTables;
+export default JobsPage;

@@ -17,6 +17,7 @@ import {
   TableIcon,
   UserCircleIcon,
   FileIcon,
+  ChatIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 
@@ -47,6 +48,11 @@ const navItems: NavItem[] = [
     name: "Create Resume",
     icon: <FileIcon />,
     path: "/create-resume",
+  },
+  {
+    icon: <ChatIcon />,
+    name: "Chat",
+    path: "/chat",
   },
   {
     icon: <CalenderIcon />,

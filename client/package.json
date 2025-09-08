@@ -9,9 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.25",
+    "@ai-sdk/react": "^2.0.35",
     "@apollo/client": "^4.0.4",
     "@apollo/client-integration-nextjs": "^0.13.1",
-    "graphql": "^16.11.0",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
@@ -22,9 +23,11 @@
     "@react-jvectormap/world": "^1.1.2",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/postcss": "^4.0.9",
+    "ai": "^5.0.35",
     "apexcharts": "^4.3.0",
     "autoprefixer": "^10.4.20",
     "flatpickr": "^4.6.13",
+    "graphql": "^16.11.0",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",
@@ -34,12 +37,13 @@
     "react-dropzone": "^14.3.5",
     "rxjs": "^7.8.2",
     "swiper": "^11.2.0",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@eslint/eslintrc": "^3",
     "@svgr/webpack": "^8.1.0",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

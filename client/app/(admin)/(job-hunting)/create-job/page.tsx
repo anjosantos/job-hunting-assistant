@@ -15,7 +15,7 @@ import { PlusIcon, ChevronDownIcon } from "@/icons";
 
 import { type Job, type Resume, Lead, Status } from "@/types";
 
-export const CreateJob = () => {
+export const CreateJobPage = () => {
   const [newJob, setNewJob] = useState<Job>({
     id: "",
     role: "",
@@ -419,4 +419,4 @@ export const CreateJob = () => {
   );
 };
 
-export default CreateJob;
+export default CreateJobPage;
