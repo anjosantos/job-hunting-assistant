@@ -16,6 +16,13 @@ const resumeSchema = new mongoose.Schema({
   version: Number,
 });
 
+const coverLetterTemplateSchema = new mongoose.Schema({
+  id: String,
+  title: String,
+  content: String,
+  dateCreated: String,
+});
+
 const jobSchema = new mongoose.Schema({
   id: String,
   role: String,
@@ -45,5 +52,9 @@ const jobSchema = new mongoose.Schema({
 
 const Jobs = mongoose.model("Job", jobSchema);
 const Resumes = mongoose.model("Resume", resumeSchema);
+const CoverLetterTemplates = mongoose.model(
+  "CoverLetterTemplate",
+  coverLetterTemplateSchema
+);
 
-export { Jobs, Resumes };
+export { Jobs, Resumes, CoverLetterTemplates };

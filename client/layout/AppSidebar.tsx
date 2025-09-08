@@ -50,6 +50,11 @@ const navItems: NavItem[] = [
     path: "/create-resume",
   },
   {
+    name: "Create Cover Letter Template",
+    icon: <FileIcon />,
+    path: "/create-cover-letter-template",
+  },
+  {
     icon: <ChatIcon />,
     name: "Chat",
     path: "/chat",

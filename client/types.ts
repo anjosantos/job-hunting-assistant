@@ -18,6 +18,13 @@ export type Resume = {
   version?: number;
 };
 
+export type CoverLetterTemplate = {
+  id: string;
+  title: string;
+  content: string;
+  dateCreated: string;
+};
+
 export type Job = {
   id: string;
   role: string;

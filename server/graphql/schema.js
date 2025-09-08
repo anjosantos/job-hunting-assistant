@@ -20,6 +20,13 @@ export const typeDefs = `
       version: Int
     }
 
+    type CoverLetterTemplate {
+      id: ID
+      title: String
+      content: String
+      dateCreated: String
+    }
+
     type Job {
       id: ID
       role: String
@@ -48,6 +55,13 @@ export const typeDefs = `
       version: Int
     }
 
+    input CoverLetterTemplateInput {
+      id: ID
+      title: String
+      content: String
+      dateCreated: String
+    }
+
     input JobInput {
       id: ID
       role: String
@@ -73,6 +87,7 @@ export const typeDefs = `
       getJobs: [Job]
       getJobById(id: ID!): Job
       getResumes: [Resume]
+      getCoverLetterTemplate: [CoverLetterTemplate]
     }
 
     type Mutation {
@@ -80,6 +95,7 @@ export const typeDefs = `
       updateJob(input: JobInput): Job
       deleteJob(id: ID!): String
       createResume(input: ResumeInput): Resume
+      createCoverLetterTemplate(input: CoverLetterTemplateInput): CoverLetterTemplate
     }
 
 `;

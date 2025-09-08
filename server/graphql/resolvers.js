@@ -1,4 +1,4 @@
-import { Jobs, Resumes } from "../db/connector.js";
+import { Jobs, Resumes, CoverLetterTemplates } from "../db/connector.js";
 
 export const resolvers = {
   Query: {
@@ -91,6 +91,19 @@ export const resolvers = {
       newResume.id = newResume._id;
       await newResume.save();
       return newResume;
+    },
+
+    createCoverLetterTemplate: async (_, { input }) => {
+      const { title, content, dateCreated } = input;
+      const newCoverLetterTemplate = new CoverLetterTemplates({
+        title,
+        content,
+        dateCreated,
+      });
+
+      newCoverLetterTemplate.id = newCoverLetterTemplate._id;
+      await newCoverLetterTemplate.save();
+      return newCoverLetterTemplate;
     },
   },
 };
