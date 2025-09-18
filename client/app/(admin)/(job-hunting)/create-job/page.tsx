@@ -11,6 +11,7 @@ import TextArea from "@/components/form/input/TextArea";
 import DatePicker from "@/components/form/date-picker";
 import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
+import Alert from "@/components/ui/alert/Alert";
 import { PlusIcon, ChevronDownIcon } from "@/icons";
 
 import { type Job, type Resume, Lead, Status } from "@/types";
@@ -36,6 +37,7 @@ export const CreateJobPage = () => {
     withCoverLetter: false,
     referenceLink: "",
   });
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const CREATE_JOB = gql`
     mutation CreateJob(
@@ -103,7 +105,7 @@ export const CreateJobPage = () => {
     loading: getResumesLoading,
   } = useQuery<GetResumesType>(GET_RESUMES);
 
-  const [createJob, { loading }] = useMutation(CREATE_JOB, {
+  const [createJob, { loading: createJobLoading }] = useMutation(CREATE_JOB, {
     onCompleted: () => {
       setNewJob({
         id: "",
@@ -125,6 +127,12 @@ export const CreateJobPage = () => {
         withCoverLetter: false,
         referenceLink: "",
       });
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 3000);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     onError: (error) => {
       console.error("Mutation error:", error);
@@ -158,6 +166,14 @@ export const CreateJobPage = () => {
     <div>
       <div className="grid grid-cols-1 gap-6">
         <div className="space-y-6">
+          {isSuccess && (
+            <Alert
+              variant="success"
+              title="Success!"
+              message="The job has been created and added to your job list."
+              showLink={false}
+            />
+          )}
           <ComponentCard title="Create Job">
             <div className="space-y-6">
               <div>
@@ -412,9 +428,9 @@ export const CreateJobPage = () => {
                   variant="primary"
                   startIcon={<PlusIcon />}
                   onClick={handleCreateJob}
-                  disabled={loading}
+                  disabled={createJobLoading}
                 >
-                  {loading ? "Creating..." : "Create"}
+                  {createJobLoading ? "Creating..." : "Create"}
                 </Button>
               </div>
             </div>
