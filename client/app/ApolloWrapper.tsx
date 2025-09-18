@@ -1,6 +1,13 @@
 "use client";
 // ^ this file needs the "use client" pragma
 
+// Extend the Window interface to include __APOLLO_STATE__
+declare global {
+  interface Window {
+    __APOLLO_STATE__?: any;
+  }
+}
+
 import { HttpLink } from "@apollo/client";
 import {
   ApolloNextAppProvider,
@@ -29,7 +36,7 @@ function makeClient() {
   // use the `ApolloClient` from "@apollo/client-integration-nextjs"
   return new ApolloClient({
     // use the `InMemoryCache` from "@apollo/client-integration-nextjs"
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
     link: httpLink,
   });
 }
