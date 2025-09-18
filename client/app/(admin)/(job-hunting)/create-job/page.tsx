@@ -26,8 +26,8 @@ export const CreateJobPage = () => {
     dateCreated: "",
     dateApprovedRejected: "",
     lead: "",
-    salaryMin: 0,
-    salaryMax: 0,
+    salaryMin: "",
+    salaryMax: "",
     status: Status.SENT,
     isExternalWebsite: false,
     withGithubLink: false,
@@ -115,8 +115,8 @@ export const CreateJobPage = () => {
         dateCreated: "",
         dateApprovedRejected: "",
         lead: "",
-        salaryMin: 0,
-        salaryMax: 0,
+        salaryMin: "",
+        salaryMax: "",
         status: Status.SENT,
         isExternalWebsite: false,
         withGithubLink: false,
@@ -132,6 +132,12 @@ export const CreateJobPage = () => {
   });
 
   const handleCreateJob = () => {
+    if (newJob.salaryMin === "") {
+      newJob.salaryMin = 0;
+    }
+    if (newJob.salaryMax === "") {
+      newJob.salaryMax = 0;
+    }
     console.log(newJob, "newJob");
     createJob({
       variables: {
@@ -291,7 +297,7 @@ export const CreateJobPage = () => {
                     onChange={(e) =>
                       setNewJob((prev) => ({
                         ...prev,
-                        salaryMin: Number(e.target.value),
+                        salaryMin: e.target.value ? Number(e.target.value) : "",
                       }))
                     }
                     placeholder="Min Salary"
@@ -305,7 +311,7 @@ export const CreateJobPage = () => {
                     onChange={(e) =>
                       setNewJob((prev) => ({
                         ...prev,
-                        salaryMax: Number(e.target.value),
+                        salaryMax: e.target.value ? Number(e.target.value) : "",
                       }))
                     }
                     placeholder="Max Salary"

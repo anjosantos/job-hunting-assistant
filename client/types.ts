@@ -35,8 +35,8 @@ export type Job = {
   dateCreated: string;
   dateApprovedRejected: string;
   lead: Lead | "";
-  salaryMin: number;
-  salaryMax: number;
+  salaryMin: number | "";
+  salaryMax: number | "";
   status?: Status;
   isExternalWebsite: boolean;
   withGithubLink: boolean;
