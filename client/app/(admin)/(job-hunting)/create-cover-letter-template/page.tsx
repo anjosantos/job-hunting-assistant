@@ -9,6 +9,7 @@ import TextArea from "@/components/form/input/TextArea";
 import Input from "@/components/form/input/InputField";
 import DatePicker from "@/components/form/date-picker";
 import Button from "@/components/ui/button/Button";
+import Alert from "@/components/ui/alert/Alert";
 import { PlusIcon } from "@/icons";
 
 import { type CoverLetterTemplate } from "@/types";
@@ -21,6 +22,7 @@ export const CreateCoverLetterTemplatePage = () => {
       content: "",
       dateCreated: "",
     });
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const CREATE_CoverLetterTemplate = gql`
     mutation CreateCoverLetterTemplate(
@@ -46,6 +48,12 @@ export const CreateCoverLetterTemplatePage = () => {
           content: "",
           dateCreated: "",
         });
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 3000);
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
       },
     }
   );
@@ -64,6 +72,14 @@ export const CreateCoverLetterTemplatePage = () => {
     <div>
       <div className="grid grid-cols-1 gap-6">
         <div className="space-y-6">
+          {isSuccess && (
+            <Alert
+              variant="success"
+              title="Success!"
+              message="The cover letter template has been created and added to your template list."
+              showLink={false}
+            />
+          )}
           <ComponentCard title="Create CoverLetterTemplate">
             <div className="space-y-6">
               <div>

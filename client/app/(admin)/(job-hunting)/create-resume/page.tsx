@@ -8,6 +8,7 @@ import Label from "@/components/form/Label";
 import TextArea from "@/components/form/input/TextArea";
 import DatePicker from "@/components/form/date-picker";
 import Button from "@/components/ui/button/Button";
+import Alert from "@/components/ui/alert/Alert";
 import { PlusIcon } from "@/icons";
 
 import { type Resume } from "@/types";
@@ -18,6 +19,7 @@ export const CreateResumePage = () => {
     content: "",
     dateCreated: "",
   });
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const CREATE_RESUME = gql`
     mutation CreateResume($content: String!, $dateCreated: String!) {
@@ -34,6 +36,12 @@ export const CreateResumePage = () => {
         content: "",
         dateCreated: "",
       });
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 3000);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
   });
 
@@ -50,6 +58,14 @@ export const CreateResumePage = () => {
     <div>
       <div className="grid grid-cols-1 gap-6">
         <div className="space-y-6">
+          {isSuccess && (
+            <Alert
+              variant="success"
+              title="Success!"
+              message="The resume has been created and added to your resume list."
+              showLink={false}
+            />
+          )}
           <ComponentCard title="Create Resume">
             <div className="space-y-6">
               <div>
