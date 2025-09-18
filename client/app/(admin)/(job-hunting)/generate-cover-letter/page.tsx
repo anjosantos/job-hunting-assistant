@@ -104,6 +104,16 @@ const GenerateCoverLetterPage = () => {
     loading: getJobsLoading,
   } = useQuery<GetJobsType>(GET_JOBS);
 
+  const chatMessages = messages.filter((message) => message.role !== "user");
+  const chatMessagesOutput = chatMessages
+    .map((message) =>
+      message.parts
+        .filter((part) => part.type === "text")
+        .map((part) => part.text)
+        .join(" ")
+    )
+    .join("\n");
+
   return (
     <div className="grid grid-cols-1 gap-6">
       <ComponentCard title="Generate Cover Letter">
@@ -203,19 +213,31 @@ const GenerateCoverLetterPage = () => {
           </div>
         </form>
       </ComponentCard>
-      {messages.filter((message) => message.role !== "user").length > 0 && (
-        <ComponentCard title="Cover Letter">
-          <Markdown>
-            {messages
-              .filter((message) => message.role !== "user")
-              .map((message) =>
-                message.parts
-                  .filter((part) => part.type === "text")
-                  .map((part) => part.text)
-                  .join(" ")
-              )
-              .join("\n")}
-          </Markdown>
+      {chatMessages.length > 0 && (
+        <ComponentCard
+          title="Cover Letter"
+          headerLink={
+            <Button
+              size="sm"
+              variant="outline"
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(chatMessagesOutput);
+                const button = document.activeElement as HTMLButtonElement;
+                if (button) {
+                  const originalText = button.textContent;
+                  button.textContent = "Copied";
+                  setTimeout(() => {
+                    button.textContent = originalText;
+                  }, 3000);
+                }
+              }}
+            >
+              Copy
+            </Button>
+          }
+        >
+          <Markdown>{chatMessagesOutput}</Markdown>
         </ComponentCard>
       )}
     </div>
