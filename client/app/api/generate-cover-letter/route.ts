@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: openai("gpt-4.1"),
-    system: `You are a job hunting assistant`,
+    system: `You are a job hunting assistant. I need you generate a cover letter for a job application based on my resume and the job description. I may also give another cover letter for reference. Please answer with the generated cover letter only.`,
     messages: convertToModelMessages(messages),
   });
 

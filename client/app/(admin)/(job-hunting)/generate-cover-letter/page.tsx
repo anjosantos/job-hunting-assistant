@@ -30,10 +30,13 @@ const GenerateCoverLetterPage = () => {
       Here is my resume:
       ${resumeContent}
 
-      I want to create a new cover letter and use this a reference/template:
-      ${coverLetterTemplateContent}
+      ${
+        coverLetterTemplateContent
+          ? `I want to create a new cover letter and use this a reference/template: ${coverLetterTemplateContent}`
+          : `Please generate me a cover letter based on my resume and the job description.`
+      }
       `);
-  }, [resumeContent, jobDescription]);
+  }, [resumeContent, jobDescription, coverLetterTemplateContent]);
 
   const { messages, sendMessage } = useChat({
     transport: new DefaultChatTransport({
