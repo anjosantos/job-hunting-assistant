@@ -21,6 +21,16 @@ export const CreateResumePage = () => {
   });
   const [isSuccess, setIsSuccess] = useState(false);
 
+  type ResumeErrors = {
+    content: string;
+    dateCreated: string;
+  };
+
+  const [resumeErrors, setResumeErrors] = useState<ResumeErrors>({
+    content: "",
+    dateCreated: "",
+  });
+
   const CREATE_RESUME = gql`
     mutation CreateResume($content: String!, $dateCreated: String!) {
       createResume(input: { content: $content, dateCreated: $dateCreated }) {
@@ -45,7 +55,32 @@ export const CreateResumePage = () => {
     },
   });
 
+  const validateResume = (newResume: Resume) => {
+    let isValid = true;
+    const errors: ResumeErrors = {
+      content: "",
+      dateCreated: "",
+    };
+
+    if (!newResume.content || newResume.content.trim() === "") {
+      errors.content = "Content is required.";
+      isValid = false;
+    }
+
+    if (!newResume.dateCreated || newResume.dateCreated.trim() === "") {
+      errors.dateCreated = "Date Created is required.";
+      isValid = false;
+    }
+
+    setResumeErrors(errors);
+    return isValid;
+  };
+
   const handleCreateResume = () => {
+    if (!validateResume(newResume)) {
+      return;
+    }
+
     createResume({
       variables: {
         content: newResume.content,
@@ -80,6 +115,8 @@ export const CreateResumePage = () => {
                   }
                   placeholder="Enter resume content"
                   rows={20}
+                  error={resumeErrors.content !== ""}
+                  hint={resumeErrors.content}
                 />
               </div>
               <div>
@@ -94,6 +131,8 @@ export const CreateResumePage = () => {
                       dateCreated: currentDateString,
                     }));
                   }}
+                  error={resumeErrors.dateCreated !== ""}
+                  hint={resumeErrors.dateCreated}
                 />
               </div>
               <div className="flex justify-end">

@@ -23,6 +23,11 @@ export const CreateCoverLetterTemplatePage = () => {
       dateCreated: "",
     });
   const [isSuccess, setIsSuccess] = useState(false);
+  const [coverLetterTemplateErrors, setCoverLetterTemplateErrors] = useState({
+    title: "",
+    content: "",
+    dateCreated: "",
+  });
 
   const CREATE_CoverLetterTemplate = gql`
     mutation CreateCoverLetterTemplate(
@@ -58,7 +63,40 @@ export const CreateCoverLetterTemplatePage = () => {
     }
   );
 
+  const validateCoverLetterTemplate = (
+    newCoverLetterTemplate: CoverLetterTemplate
+  ) => {
+    let isValid = true;
+    const errors = {
+      title: "",
+      content: "",
+      dateCreated: "",
+    };
+
+    if (!newCoverLetterTemplate.title.trim()) {
+      errors.title = "Title is required.";
+      isValid = false;
+    }
+
+    if (!newCoverLetterTemplate.content.trim()) {
+      errors.content = "Content is required.";
+      isValid = false;
+    }
+
+    if (!newCoverLetterTemplate.dateCreated.trim()) {
+      errors.dateCreated = "Date Created is required.";
+      isValid = false;
+    }
+
+    setCoverLetterTemplateErrors(errors);
+    return isValid;
+  };
+
   const handleCreateCoverLetterTemplate = () => {
+    if (!validateCoverLetterTemplate(newCoverLetterTemplate)) {
+      return;
+    }
+
     createCoverLetterTemplate({
       variables: {
         title: newCoverLetterTemplate.title,
@@ -94,6 +132,8 @@ export const CreateCoverLetterTemplatePage = () => {
                     }))
                   }
                   placeholder="Enter title here"
+                  error={coverLetterTemplateErrors.title !== ""}
+                  hint={coverLetterTemplateErrors.title}
                 />
               </div>
               <div>
@@ -108,6 +148,8 @@ export const CreateCoverLetterTemplatePage = () => {
                   }
                   placeholder="Enter CoverLetterTemplate content"
                   rows={20}
+                  error={coverLetterTemplateErrors.content !== ""}
+                  hint={coverLetterTemplateErrors.content}
                 />
               </div>
               <div>
@@ -122,6 +164,8 @@ export const CreateCoverLetterTemplatePage = () => {
                       dateCreated: currentDateString,
                     }));
                   }}
+                  error={coverLetterTemplateErrors.dateCreated !== ""}
+                  hint={coverLetterTemplateErrors.dateCreated}
                 />
               </div>
               <div className="flex justify-end">

@@ -39,6 +39,26 @@ export const CreateJobPage = () => {
   });
   const [isSuccess, setIsSuccess] = useState(false);
 
+  type JobErrors = {
+    role: string;
+    description: string;
+    company: string;
+    location: string;
+    resumePosted: string;
+    dateCreated: string;
+    lead: string;
+  };
+
+  const [jobErrors, setJobErrors] = useState<JobErrors>({
+    role: "",
+    description: "",
+    company: "",
+    location: "",
+    resumePosted: "",
+    dateCreated: "",
+    lead: "",
+  });
+
   const CREATE_JOB = gql`
     mutation CreateJob(
       $role: String
@@ -139,6 +159,57 @@ export const CreateJobPage = () => {
     },
   });
 
+  const validateJob = (newJob: Job): boolean => {
+    let isValid = true;
+    const errors: JobErrors = {
+      role: "",
+      description: "",
+      company: "",
+      location: "",
+      resumePosted: "",
+      dateCreated: "",
+      lead: "",
+    };
+
+    if (!newJob.role || newJob.role.trim() === "") {
+      errors.role = "Role is required.";
+      isValid = false;
+    }
+
+    if (!newJob.description || newJob.description.trim() === "") {
+      errors.description = "Description is required.";
+      isValid = false;
+    }
+
+    if (!newJob.company || newJob.company.trim() === "") {
+      errors.company = "Company is required.";
+      isValid = false;
+    }
+
+    if (!newJob.location || newJob.location.trim() === "") {
+      errors.location = "Location is required.";
+      isValid = false;
+    }
+
+    if (!newJob.resumePosted) {
+      errors.resumePosted = "Resume is required.";
+      isValid = false;
+    }
+
+    if (!newJob.dateCreated || newJob.dateCreated.trim() === "") {
+      errors.dateCreated = "Date Created is required.";
+      isValid = false;
+    }
+
+    if (!newJob.lead || newJob.lead.trim() === "") {
+      errors.lead = "Lead source is required.";
+      isValid = false;
+    }
+
+    setJobErrors(errors);
+    return isValid;
+  };
+
   const handleCreateJob = () => {
     if (newJob.salaryMin === "") {
       newJob.salaryMin = 0;
@@ -146,7 +217,10 @@ export const CreateJobPage = () => {
     if (newJob.salaryMax === "") {
       newJob.salaryMax = 0;
     }
-    console.log(newJob, "newJob");
+    if (!validateJob(newJob)) {
+      return;
+    }
+
     createJob({
       variables: {
         ...newJob,
@@ -185,6 +259,8 @@ export const CreateJobPage = () => {
                     setNewJob((prev) => ({ ...prev, role: e.target.value }))
                   }
                   placeholder="Enter role here"
+                  hint={jobErrors.role}
+                  error={jobErrors.role !== ""}
                 />
               </div>
 
@@ -200,6 +276,8 @@ export const CreateJobPage = () => {
                   }
                   placeholder="Enter description here"
                   rows={6}
+                  hint={jobErrors.description}
+                  error={jobErrors.description !== ""}
                 />
               </div>
 
@@ -212,6 +290,8 @@ export const CreateJobPage = () => {
                     setNewJob((prev) => ({ ...prev, company: e.target.value }))
                   }
                   placeholder="Enter company here"
+                  hint={jobErrors.company}
+                  error={jobErrors.company !== ""}
                 />
               </div>
 
@@ -220,6 +300,7 @@ export const CreateJobPage = () => {
                 {getResumesData && getResumesData.getResumes ? (
                   <div className="relative">
                     <Select
+                      id="select-resume"
                       options={getResumesData.getResumes.map(
                         (resume: Resume) => ({
                           value: resume.id,
@@ -246,6 +327,8 @@ export const CreateJobPage = () => {
                         }));
                       }}
                       className="dark:bg-dark-900"
+                      error={jobErrors.resumePosted !== ""}
+                      hint={jobErrors.resumePosted}
                     />
                     <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                       <ChevronDownIcon />
@@ -265,6 +348,8 @@ export const CreateJobPage = () => {
                     setNewJob((prev) => ({ ...prev, location: e.target.value }))
                   }
                   placeholder="Enter location here"
+                  hint={jobErrors.location}
+                  error={jobErrors.location !== ""}
                 />
               </div>
 
@@ -280,6 +365,8 @@ export const CreateJobPage = () => {
                       dateCreated: currentDateString,
                     }));
                   }}
+                  error={jobErrors.dateCreated !== ""}
+                  hint={jobErrors.dateCreated}
                 />
               </div>
 
@@ -297,6 +384,8 @@ export const CreateJobPage = () => {
                       }));
                     }}
                     className="dark:bg-dark-900"
+                    error={jobErrors.lead !== ""}
+                    hint={jobErrors.lead}
                   />
                   <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                     <ChevronDownIcon />
