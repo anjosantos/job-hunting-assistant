@@ -47,12 +47,12 @@ const JobsPage = async () => {
   return (
     <div>
       <PageBreadcrumb pageTitle="Jobs" />
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
               {/* Table Header */}
-              <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+              <TableHeader className="border-b border-gray-100">
                 <TableRow>
                   <TableCell
                     isHeader
@@ -117,7 +117,7 @@ const JobsPage = async () => {
                 </TableRow>
               </TableHeader>
 
-              <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+              <TableBody className="divide-y divide-gray-100">
                 {getJobsData &&
                   getJobsData.getJobs.map((job, index) => (
                     <TableRow key={`rowJobs${index}`}>
