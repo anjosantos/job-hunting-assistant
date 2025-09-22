@@ -37,6 +37,52 @@ const GET_RESUMES = gql`
   }
 `;
 
+const CREATE_JOB = gql`
+  mutation CreateJob(
+    $role: String
+    $description: String
+    $company: String
+    $location: String
+    $resumePosted: ResumeInput
+    $dateCreated: String
+    $dateApprovedRejected: String
+    $lead: Lead
+    $salaryMin: Int
+    $salaryMax: Int
+    $status: Status
+    $isExternalWebsite: Boolean
+    $withGithubLink: Boolean
+    $withLinkedinLink: Boolean
+    $withPortfolioLink: Boolean
+    $withCoverLetter: Boolean
+    $referenceLink: String
+  ) {
+    createJob(
+      input: {
+        role: $role
+        description: $description
+        company: $company
+        location: $location
+        resumePosted: $resumePosted
+        dateCreated: $dateCreated
+        dateApprovedRejected: $dateApprovedRejected
+        lead: $lead
+        salaryMin: $salaryMin
+        salaryMax: $salaryMax
+        status: $status
+        isExternalWebsite: $isExternalWebsite
+        withGithubLink: $withGithubLink
+        withLinkedinLink: $withLinkedinLink
+        withPortfolioLink: $withPortfolioLink
+        withCoverLetter: $withCoverLetter
+        referenceLink: $referenceLink
+      }
+    ) {
+      id
+    }
+  }
+`;
+
 const UPDATE_JOB = gql`
   mutation UpdateJob(
     $id: ID!
@@ -85,49 +131,9 @@ const UPDATE_JOB = gql`
   }
 `;
 
-const CREATE_JOB = gql`
-  mutation CreateJob(
-    $role: String
-    $description: String
-    $company: String
-    $location: String
-    $resumePosted: ResumeInput
-    $dateCreated: String
-    $dateApprovedRejected: String
-    $lead: Lead
-    $salaryMin: Int
-    $salaryMax: Int
-    $status: Status
-    $isExternalWebsite: Boolean
-    $withGithubLink: Boolean
-    $withLinkedinLink: Boolean
-    $withPortfolioLink: Boolean
-    $withCoverLetter: Boolean
-    $referenceLink: String
-  ) {
-    createJob(
-      input: {
-        role: $role
-        description: $description
-        company: $company
-        location: $location
-        resumePosted: $resumePosted
-        dateCreated: $dateCreated
-        dateApprovedRejected: $dateApprovedRejected
-        lead: $lead
-        salaryMin: $salaryMin
-        salaryMax: $salaryMax
-        status: $status
-        isExternalWebsite: $isExternalWebsite
-        withGithubLink: $withGithubLink
-        withLinkedinLink: $withLinkedinLink
-        withPortfolioLink: $withPortfolioLink
-        withCoverLetter: $withCoverLetter
-        referenceLink: $referenceLink
-      }
-    ) {
-      id
-    }
+const DELETE_JOB = gql`
+  mutation DeleteJob($id: ID!) {
+    deleteJob(id: $id)
   }
 `;
 
@@ -226,6 +232,12 @@ export default function JobForm({
     },
     onError: (error) => console.error("Update error:", error),
   });
+  const [deleteJob, { loading: deleteJobLoading }] = useMutation(DELETE_JOB, {
+    onCompleted: () => {
+      window.location.href = "/jobs";
+    },
+    onError: (error) => console.error("Update error:", error),
+  });
 
   useEffect(() => {
     if (initialJob) setJob(initialJob);
@@ -275,7 +287,6 @@ export default function JobForm({
     }
     if (!validateJob(job)) return;
 
-    console.log(job);
     if (mode === "create") {
       createJob({
         variables: {
@@ -290,6 +301,10 @@ export default function JobForm({
         },
       });
     }
+  };
+
+  const handleDelete = () => {
+    deleteJob({ variables: { id: jobId } });
   };
 
   const leadOptions = [
@@ -575,6 +590,17 @@ export default function JobForm({
               </div>
               {mode !== "view" && (
                 <div className="flex justify-end">
+                  {mode === "edit" && (
+                    <Button
+                      className="mr-3 bg-red-600 border-red-600 hover:bg-red-400 hover:text-white focus:ring-red-600"
+                      size="sm"
+                      variant="primary"
+                      onClick={handleDelete}
+                      disabled={deleteJobLoading}
+                    >
+                      {deleteJobLoading ? "Deleting..." : "Delete"}
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="primary"
