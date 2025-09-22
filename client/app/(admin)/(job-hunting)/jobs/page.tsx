@@ -122,10 +122,20 @@ const JobsPage = async () => {
                   getJobsData.getJobs.map((job, index) => (
                     <TableRow key={`rowJobs${index}`}>
                       <TableCell className="px-4 py-3 text-start text-theme-sm dark:text-gray-400">
-                        {job.company}
+                        <a
+                          href={`/jobs/${job.id}`}
+                          className="font-medium text-gray-800 underline hover:text-gray-600 dark:text-gray-300"
+                        >
+                          {job.company}
+                        </a>
                       </TableCell>
                       <TableCell className="px-5 py-4 text-start text-theme-sm dark:text-gray-400">
-                        {job.role}
+                        <a
+                          href={`/jobs/${job.id}`}
+                          className="font-medium text-gray-800 underline hover:text-gray-600 dark:text-gray-300"
+                        >
+                          {job.role}
+                        </a>
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {job.description.length > 60
