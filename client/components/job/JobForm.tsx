@@ -15,6 +15,7 @@ import Alert from "@/components/ui/alert/Alert";
 import { PlusIcon, ChevronDownIcon } from "@/icons";
 
 import { type Job, type Resume, Lead, Status } from "@/types";
+import { removeTypename } from "@/utils/helpers";
 
 export type JobFormMode = "create" | "edit" | "view";
 
@@ -37,8 +38,48 @@ const GET_RESUMES = gql`
 `;
 
 const UPDATE_JOB = gql`
-  mutation UpdateJob($id: ID!, $input: JobInput!) {
-    updateJob(id: $id, input: $input) {
+  mutation UpdateJob(
+    $id: ID!
+    $role: String
+    $description: String
+    $company: String
+    $location: String
+    $resumePosted: ResumeInput
+    $dateCreated: String
+    $dateApprovedRejected: String
+    $lead: Lead
+    $salaryMin: Int
+    $salaryMax: Int
+    $status: Status
+    $isExternalWebsite: Boolean
+    $withGithubLink: Boolean
+    $withLinkedinLink: Boolean
+    $withPortfolioLink: Boolean
+    $withCoverLetter: Boolean
+    $referenceLink: String
+  ) {
+    updateJob(
+      input: {
+        id: $id
+        role: $role
+        description: $description
+        company: $company
+        location: $location
+        resumePosted: $resumePosted
+        dateCreated: $dateCreated
+        dateApprovedRejected: $dateApprovedRejected
+        lead: $lead
+        salaryMin: $salaryMin
+        salaryMax: $salaryMax
+        status: $status
+        isExternalWebsite: $isExternalWebsite
+        withGithubLink: $withGithubLink
+        withLinkedinLink: $withLinkedinLink
+        withPortfolioLink: $withPortfolioLink
+        withCoverLetter: $withCoverLetter
+        referenceLink: $referenceLink
+      }
+    ) {
       id
     }
   }
@@ -180,6 +221,8 @@ export default function JobForm({
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 3000);
       if (onSuccess) onSuccess();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     onError: (error) => console.error("Update error:", error),
   });
@@ -240,7 +283,12 @@ export default function JobForm({
         },
       });
     } else if (mode === "edit" && jobId) {
-      updateJob({ variables: { id: jobId, input: job } });
+      const newJob = removeTypename(job);
+      updateJob({
+        variables: {
+          ...newJob,
+        },
+      });
     }
   };
 
@@ -530,7 +578,7 @@ export default function JobForm({
                   <Button
                     size="sm"
                     variant="primary"
-                    startIcon={<PlusIcon />}
+                    startIcon={mode === "create" ? <PlusIcon /> : undefined}
                     onClick={handleSubmit}
                     disabled={createJobLoading || updateJobLoading}
                   >

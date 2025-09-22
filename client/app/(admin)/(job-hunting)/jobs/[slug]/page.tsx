@@ -16,12 +16,22 @@ const GET_JOB_BY_ID = gql`
       location
       resumePosted {
         id
+        content
+        dateCreated
+        version
       }
       dateCreated
       lead
       salaryMin
       salaryMax
       status
+      referenceLink
+      isExternalWebsite
+      withGithubLink
+      withLinkedinLink
+      withPortfolioLink
+      withCoverLetter
+      dateApprovedRejected
     }
   }
 `;
@@ -37,7 +47,7 @@ const JobDetailPage = ({ params }: { params: Promise<{ slug: string }> }) => {
 
   if (loading) return <div>Loading...</div>;
   if (!data?.getJobById)
-    return <div className="p-8 text-red-500">Job not found.</div>;
+    return <div className="text-red-500">Job not found.</div>;
 
   return <JobForm mode="edit" initialJob={data.getJobById} jobId={slug} />;
 };
