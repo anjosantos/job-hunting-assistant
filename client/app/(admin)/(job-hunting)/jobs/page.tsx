@@ -138,9 +138,11 @@ const JobsPage = async () => {
                         </a>
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                        {job.description.length > 60
-                          ? `${job.description.slice(0, 60)}...`
-                          : job.description}
+                        {job.description
+                          ? job.description.length > 60
+                            ? `${job.description.slice(0, 60)}...`
+                            : job.description
+                          : "No description"}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {job.location}
